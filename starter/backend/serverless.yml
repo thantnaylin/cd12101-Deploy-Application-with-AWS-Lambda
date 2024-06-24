@@ -45,15 +45,6 @@ provider:
             - xray:PutTelemetryRecords
             - xray:PutTraceSegments
           Resource: "*"
-        - Effect: Allow
-          Action:
-            - s3:CreateBucket
-            - s3:DeleteBucket
-            - s3:PutBucketPolicy
-            - s3:DeleteBucketPolicy
-            - s3:PutBucketCors
-            - s3:DeleteBucketCors
-          Resource: "arn:aws:s3:::*"
 
 custom:
   esbuild:
@@ -219,18 +210,23 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:provider.environment.ATTACHMENT_S3_BUCKET}
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+        OwnershipControls:
+          Rules:
+            - ObjectOwnership: ObjectWriter
         CorsConfiguration:
           CorsRules:
-            - AllowedHeaders:
-                - "*"
-              AllowedOrigins:
-                - "*"
+            - AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
               AllowedMethods:
                 - GET
-                - POST
                 - PUT
-                - HEAD
+                - POST
                 - DELETE
+                - HEAD
               MaxAge: 3000
 
     # S3 Attachments Bucket Policy
@@ -251,3 +247,6 @@ resources:
                   - ${self:provider.environment.ATTACHMENT_S3_BUCKET}
                   - /*
               Principal: "*"
+              Condition:
+                Bool:
+                  aws:SecureTransport: 'true'
