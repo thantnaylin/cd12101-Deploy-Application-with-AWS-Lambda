@@ -37,14 +37,6 @@ provider:
   logs:
     restApi: true
 
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - xray:PutTelemetryRecords
-            - xray:PutTraceSegments
-          Resource: "*"
 
 custom:
   esbuild:
@@ -138,6 +130,7 @@ functions:
 
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
+    timeout: 30
     events:
       - http:
           method: post
