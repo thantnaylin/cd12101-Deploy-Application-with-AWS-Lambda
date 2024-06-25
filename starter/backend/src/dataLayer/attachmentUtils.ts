@@ -14,7 +14,7 @@ export class AttachmentUtils {
         const params = {
             Bucket: this.s3Bucket,
             Key: todoId,
-            Expires: this.s3SignedUrlExpiration
+            Expires: Number(this.s3SignedUrlExpiration)
         }
         return this.s3.getSignedUrl('putObject', params)
     }

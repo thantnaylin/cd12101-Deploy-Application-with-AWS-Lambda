@@ -93,6 +93,9 @@ export class TodosAccess {
         }
 
         const result = await this.docClient.update(params).promise()
+
+        console.log('Finished updating attachment url')
+        
         const item = result.Attributes
         return item as TodoItem
     }
